@@ -32,6 +32,7 @@ class Director(models.Model):
 
 
 class Pelicula(models.Model):
+    #habria que meter un metodo para q lo tome como objeto, investigar
     genero = models.CharField(max_length=30)
     nombre = models.Field.primary_key=True
     resumen = models.CharField(max_length=350)
@@ -39,7 +40,7 @@ class Pelicula(models.Model):
     anio_de_Lanzamiento = models.DateField()
     director = models.ForeignKey(Director,on_delete=models.RESTRICT)
     puntaje = models.IntegerField(default=1,validators=[MinValueValidator(1),MaxValueValidator(5)])
-
+    #falta una clase que ordene todo, una clase meta y una clase save, para guardar todo
     def calcular_Puntaje(self):
         todos = 0
         puntajes = 0
@@ -64,7 +65,7 @@ class Critica(models.Model):
     nombre_pelicula = models.ForeignKey(Pelicula, on_delete=models.CASCADE)
     puntaje = models.IntegerField(default=1,validators=[MinValueValidator(1), MaxValueValidator(5)])
     resenia = models.CharField(max_length=400)
-    
+    #falta una clase meta que ordene todo
     def save(self, *args, **kwargs):
         super(Critica, self).save(*args, **kwargs)
     def __tenerpeli(self):
