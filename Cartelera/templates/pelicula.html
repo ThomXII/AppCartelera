@@ -1,0 +1,47 @@
+{% extends 'main.html' %}
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+    {% if object_list %}
+    {% for Pelicula in object_list %}
+    <tr>
+        <div class = "row" style=background-color:#ccc>
+            <div class = "col-lg-4" style= "background-color:#aaa">
+                <h1>nombre</h1>
+                <p>{{Pelicula.nombre}}</p>
+            </div>
+            
+        <!--<td>{{Pelicula.nombre}}</td>
+        <td>{{Pelicula.lanzamiento}}</td>
+        <td>{{Pelicula.director}}</td>
+        <td>{{Pelicula.actores}}</td>
+        <td>{{Pelicula.resumen}}</td>
+        -->    
+    </tr>
+    {% endfor %}
+    {% endif %}
+</body>
+</html>
+<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.0-beta1/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-0evHe/X+R7YkIZDRvuzKMRqM+OrBnVFBL6DOitfPri4tjfHxaWutUpFmBp4vmVor" crossorigin="anonymous">
+
+<!--<div class="row">
+    <div class="col-lg-4"  style="background-color:#aaa">
+      <h1>Columna 1</h1> 
+      <p>Esto es una prueba de bootstrap.</p>
+    </div>
+    <div class="col-lg-4"  style="background-color:#bbb">
+      <h1>Columna 2</h1> 
+      <p>Esto es una prueba de bootstrap.</p>
+    </div>
+    <div class="col-lg-4"  style="background-color:#ccc">
+      <h1>Columna 3</h1> 
+      <p>Esto es una prueba de bootstrap.</p>
+    </div>
+  </div>
+-->

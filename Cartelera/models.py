@@ -1,87 +1,82 @@
-from pyexpat import model
+from cgitb import text
+from wsgiref import validate
 from django.core.validators import MaxValueValidator, MinValueValidator
-from re import M
 from django.db import models 
-from django.forms import CharField
 
 # Create your models here.
 
 class Actor(models.Model):
-    nombre_Actor = models.CharField(max_length=50)
+    nombre = models.CharField(max_length=50)
     nacionalidad = models.CharField(max_length=30)
-    foto_Actor = models.ImageField(blank=True)
-    anio_nacimiento = models.DateField()
-    resumen_Bibliografico = models.CharField(max_length=300)
+    foto = models.ImageField(blank=True)
+    nacimiento = models.DateField()
+    bio = models.TextField(max_length=700)
 
-    def __str__(self) -> str:
-        return self.nombre_Actor + " ;"+self.nacionalidad+ " ;"+self.anio_nacimiento+" ;"+self.resumen_Bibliografico
+    def __str__(self):
+        return self.nombre
 
 
 class Director(models.Model):
-    nombre_Director = models.CharField(max_length=50)
+    nombre = models.CharField(max_length=50)
     nacionalidad = models.CharField(max_length=30)
-    foto_Director = models.ImageField(blank=True)
-    anio_nacimiento = models.DateField()
-    resumen_Bibliografico = models.CharField(max_length=300)
-
-    def __str__(self) -> str:
-        return self.nombre_Director+" ;"+self.nacionalidad+" ;"+self.anio_nacimiento+" ;"+self.resumen_Bibliografico
-
-    
+    foto = models.ImageField(blank=True)
+    nacimiento = models.DateField()
+    bio = models.TextField(max_length=700)
+  
+    def __str__(self):
+        return self.nombre  
 
 
 
 class Pelicula(models.Model):
-    #habria que meter un metodo para q lo tome como objeto, investigar
+    nombre = models.CharField(max_length=100,unique=True)
     genero = models.CharField(max_length=30)
-    nombre = models.Field.primary_key=True
     resumen = models.CharField(max_length=350)
-    actores = models.ManyToManyField(Actor)
-    anio_de_Lanzamiento = models.DateField()
-    director = models.ForeignKey(Director,on_delete=models.RESTRICT)
-    puntaje = models.IntegerField(default=1,validators=[MinValueValidator(1),MaxValueValidator(5)])
-    #falta una clase que ordene todo, una clase meta y una clase save, para guardar todo
-    def calcular_Puntaje(self):
-        todos = 0
-        puntajes = 0
-        lista_Puntajes = self.critica.all()
+    actores = models.ManyToManyField(Actor,related_name='peliculas')
+    lanzamiento = models.PositiveIntegerField()
+    director = models.ForeignKey('Director',on_delete=models.RESTRICT,related_name='peliculas')
+    puntaje = models.IntegerField(default=0,validators=[MinValueValidator(0),MaxValueValidator(5)])
 
-        for i in lista_Puntajes:
-            puntajes = puntajes +1
-            todos = todos + i.puntaje
-        promedio = todos // puntajes
-    def __listar_Actores(self):
-        lista_Actores = ""
-        for i in lista_Actores:
-            lista_Actores+= Actor.nombre_Actor+" ;"
-        return lista_Actores
-    
-    def __str__(self) -> str:
-        return self.genero+" ;"+self.nombre+" ;"+self.resumen+" ;"+self.actores+" ;"+self.director+" ;"+self.anio_de_Lanzamiento+" ;"+self.puntaje
-
-
-class Critica(models.Model):
-    mail = models.EmailField(max_length=100)
-    nombre_pelicula = models.ForeignKey(Pelicula, on_delete=models.CASCADE)
-    puntaje = models.IntegerField(default=1,validators=[MinValueValidator(1), MaxValueValidator(5)])
-    resenia = models.CharField(max_length=400)
-    #falta una clase meta que ordene todo
-    def save(self, *args, **kwargs):
-        super(Critica, self).save(*args, **kwargs)
-    def __tenerpeli(self):
-        return self.nombre_pelicula.nombre
-
-    def __str__(self) -> str:
-        return self.mail+" ;"+self.__tenerpeli()+" ;"+str(self.puntaje)+" ;"+self.resenia
-
-
-class Administrador(models.Model):
-    usuario_Admin = models.CharField(max_length=100)
-    contrasenia = models.CharField(max_length=100)
-
-    def __str__(self) -> str:
-        return self.usuario_Admin+" ;"+self.contrasenia
+    def promedio(self):
+        promedio = 0
+        num = 0
+        den = 0
+        a=self.criticas_get.all()
+        self.save()
+        for i in self.a():
+            num+=i
+            den+=1
         
+        promedio=0 if num == 0 else 1(num/(den))
+        self.puntaje =round(promedio)
+        self.save()
+    
+    def __str__(self):
+        return '{0}''({1})'.format(self.nombre,self.lanzamiento)
+    
+class Critica(models.Model):
+    mail = models.EmailField(max_length=100,unique=True)
+    pelicula = models.ForeignKey('Pelicula', on_delete=models.CASCADE,related_name='criticas')
+    puntaje = models.PositiveIntegerField(default=1,validators=[MinValueValidator(1), MaxValueValidator(5)])
+    resenia = models.TextField(blank=True,max_length=400)
+    validacion = models.BooleanField(default=True)
+    #falta una clase meta que ordene todo
+    #sobrecargar metodo save
+    def borrar(self):
+        if self.validacion == False:
+            self.delete()
+
+    def save(self, *args, **kwargs):
+        if self.validacion == False:
+            self.delete()
+        super().save(*args, **kwargs)
+
+
+    def __str__(self):
+        return self.mail
+
+
+
 
 
 
