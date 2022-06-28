@@ -1,19 +1,21 @@
+from random import random
 from django.http import HttpResponse
 from django.shortcuts import render
-from  .models import Pelicula,Actor,Critica,Director
+from  Cartelera.models import Pelicula,Actor,Critica,Director
 from django.views.generic import ListView 
+from django.views.generic.base import TemplateView
+from random import randint
 
-def index(request):
-    return render(request,'index.html')
 
-def main(request):
-    return render(request,'main.html')
-
-def ver_actores(request):
-    return render(request,'actores.html')
-
-def home(request):    
-    return render(request,'home.html')
+class HomeView(TemplateView):
+    template_name = "main.html"
+    paginate_by=3
+    def get_context_data(self, **kwargs):
+        context =super().get_context_data(**kwargs)
+        """listo las 12 mejores peliculas"""
+        context['peliculas']=Pelicula.objects.filter(id=randint(5,18))
+        context['top'] = Pelicula.objects.obtenerMejores()
+        return context
 
 class PeliculaList(ListView):
     model = Pelicula
