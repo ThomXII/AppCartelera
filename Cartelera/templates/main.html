@@ -75,7 +75,7 @@ position: relative;">
       </div>
       <ul class="pagination"><!--adentro del section coloco un paginate para que me devuelva arriba, como la pagina principal solo presenta las 12 peliculas, no hay nada para ir hacia delante o atras-->
         <li class="page-item">
-         <a href="#" class="page-link"style="border-color:black;color:red;background-color:black;margin-left:10px">Volver al inicio</a>
+         <a href="#" class="page-link"style="border-color:black;color:red;background-color:black;margin-left:10px;top:7px;">Volver al inicio</a>
 
         </li>
 
@@ -107,11 +107,12 @@ position: relative;">
                 {% for p in peliculas %}<!--un for para crear las columnas con las pelis-->
                 <div class="col-sm-4">
                     <img class="card-img-top" style="
+                      margin-left:115px;
                       width: 100px;
                       height: 150px;
                       padding: 1px;
                       "src="{{p.foto.url}}" alt=""><!--a nombre de peli le coloque un boton cosa de que cuando este todo hecho se pueda ingresar a la pelicula desde alli-->
-                    <div class="btn btn-primary"style="color:white;background-color:#6a040f;border-color:#6a040f;posicion:auto;bottom:auto;margin-left:90px;height:55px;width:250px"> {{p.nombre}}({{p.puntaje}})</div>                     
+                    <div class="btn btn-primary"style="color:white;background-color:#6a040f;border-color:#6a040f;posicion:center;bottom:auto;height:55px;width:250px;margin-left:40px">{{p.nombre}}({{p.puntaje}})</div>                     
 
                 {% endfor %}<!--termina el for-->
                 </div>
